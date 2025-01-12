@@ -7,7 +7,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(FLTK_DIR "C:/project/fltk-1.4.1/build"
     CACHE FILEPATH "FLTK build dir")
+set(OPENGL32_PATH "C:/Program Files/Microsoft Visual Studio/2022/Community/SDK/ScopeCppSDK/vc15/SDK/lib/OpenGL32.Lib")
+set(GLU32_PATH "C:/Program Files/Microsoft Visual Studio/2022/Community/SDK/ScopeCppSDK/vc15/SDK/lib/GlU32.Lib")
 
 find_package(FLTK 1.4 CONFIG REQUIRED)
 add_executable(POC1 main.cpp)
-target_link_libraries(POC1 PRIVATE fltk::fltk)
+target_link_libraries(POC1
+    PRIVATE fltk::fltk
+    PRIVATE fltk::gl
+    PRIVATE "${OPENGL32_PATH}"
+    PRIVATE "${GLU32_PATH}")
