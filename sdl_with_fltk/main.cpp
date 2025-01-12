@@ -1,7 +1,13 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Gl_Window.H>
 #include <FL/gl.h>
-#include <math.h>
+#include <Fl/x.H>
+
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_log.h>
+#include <SDL3/SDL_main.h>
+#include <SDL3/SDL_video.h>
+
 class MyWindow : public Fl_Gl_Window {
 
 public:
@@ -22,8 +28,37 @@ void MyWindow::draw() {
 
 int main(int argc, char** argv)
 {
-    MyWindow *window = new MyWindow(0, 0, 340, 180, "Test");
+    MyWindow *window = new MyWindow(0, 0, 600, 800, "Test");
     window->end();
     window->show(argc, argv);
-    return Fl::run();
+    SDL_Window* sdl_window;
+
+    if (!SDL_Init(SDL_INIT_VIDEO))
+    {
+        SDL_Log("Unable to init", SDL_GetError());
+    }
+    HWND hwnd = fl_xid(window);
+    SDL_PropertiesID props = SDL_CreateProperties();
+
+    SDL_SetStringProperty(props, SDL_PROP_WINDOW_CREATE_TITLE_STRING, "Title1");
+    SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_OPENGL_BOOLEAN, true);
+    SDL_SetPointerProperty(props, SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER, hwnd);
+    sdl_window = SDL_CreateWindowWithProperties(props);
+    SDL_Renderer* renderer = SDL_CreateRenderer(sdl_window, "Title1");
+    SDL_RenderClear(renderer);
+    SDL_FRect rect;
+    rect.x = 250;
+    rect.y = 150;
+    rect.w = 200;
+    rect.h = 200;
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderRect(renderer, &rect);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderPresent(renderer);
+
+    SDL_Delay(5000);
+    SDL_DestroyWindow(sdl_window);
+    SDL_DestroyProperties(props);
+    //return Fl::run();
+    return 0;
 }
