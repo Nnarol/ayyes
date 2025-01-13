@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
-        SDL_Log("Unable to init", SDL_GetError());
+        SDL_Log("Unable to init %s", SDL_GetError());
     }
     HWND hwnd = fl_xid(window);
     SDL_PropertiesID props = SDL_CreateProperties();
