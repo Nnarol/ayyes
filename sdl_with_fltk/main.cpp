@@ -3,6 +3,7 @@
 #include <FL/gl.h>
 #include <FL/x.H>
 #include <FL/Fl_Box.H>
+#include <FL/Fl_Window.H>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_log.h>
 #include <SDL3/SDL_main.h>
@@ -28,10 +29,14 @@ void MyWindow::draw() {
 
 int main(int argc, char** argv)
 {
-    MyWindow *window = new MyWindow(0, 0, 600, 800, "Test");
+    Fl_Window* main_win = new Fl_Window(0, 0, 600, 800, "Valami1");
+    Fl_Box* box = new Fl_Box(401, 401, 100, 100, "Box");
+    MyWindow *window = new MyWindow(0, 0, 400, 400, "Test");
     window->begin();
     window->end();
-    window->show(argc, argv);
+    //window->show(argc, argv);
+    main_win->end();
+    main_win->show(argc, argv);
     SDL_Window* sdl_window;
 
     if (!SDL_Init(SDL_INIT_VIDEO))
