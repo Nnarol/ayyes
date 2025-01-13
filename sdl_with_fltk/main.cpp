@@ -53,7 +53,8 @@ int main(int argc, char** argv)
     rect.y = 150;
     rect.w = 200;
     rect.h = 200;
-
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderRect(renderer, &rect);
 
