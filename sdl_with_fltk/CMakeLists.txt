@@ -11,14 +11,19 @@ set(OPENGL32_PATH "C:/Program Files/Microsoft Visual Studio/2022/Community/SDK/S
 set(GLU32_PATH "C:/Program Files/Microsoft Visual Studio/2022/Community/SDK/ScopeCppSDK/vc15/SDK/lib/GlU32.Lib")
 set(SDL3_PATH "C:/project/SDL/VisualC/x64/Release/SDL3.lib")
 set(SDL3_INCLUDE_PATH "C:/project/SDL/include")
+set(SDL_3_IMAGE_PATH "C:/project/SDL_image/VisualC/x64/Release/SDL3_image.lib")
+set(SDL3_IMAGE_INCLUDE_PATH "C:/project/SDL_image/include")
 
 find_package(FLTK 1.4 CONFIG REQUIRED)
 
 add_executable(POC1 main.cpp)
-target_include_directories(POC1 PUBLIC "${SDL3_INCLUDE_PATH}")
+target_include_directories(POC1 
+    PUBLIC "${SDL3_INCLUDE_PATH}"
+    PUBLIC "${SDL3_IMAGE_INCLUDE_PATH}")
 target_link_libraries(POC1
     PRIVATE fltk::fltk
     PRIVATE fltk::gl
     PRIVATE "${SDL3_PATH}"
+    PRIVATE "${SDL_3_IMAGE_PATH}"
     PRIVATE "${OPENGL32_PATH}"
     PRIVATE "${GLU32_PATH}")

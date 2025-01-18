@@ -8,6 +8,7 @@
 #include <SDL3/SDL_log.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_video.h>
+#include <SDL3_image/SDL_image.h>
 
 class MyWindow : public Fl_Gl_Window {
 
@@ -53,20 +54,31 @@ int main(int argc, char** argv)
     sdl_window = SDL_CreateWindowWithProperties(props);
     SDL_Renderer* renderer = SDL_CreateRenderer(sdl_window, NULL);
     SDL_RenderClear(renderer);
-    SDL_FRect rect;
-    rect.x = 250;
-    rect.y = 150;
-    rect.w = 200;
-    rect.h = 200;
+    //SDL_FRect rect;
+    //rect.x = 250;
+    //rect.y = 150;
+    //rect.w = 200;
+    //rect.h = 200;
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    SDL_RenderRect(renderer, &rect);
-
+    //SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderPresent(renderer);
-
+    //SDL_RenderRect(renderer, &rect);
+    SDL_Surface* img = IMG_Load("C:\\project\\repository\\ayyes\\sdl_with_fltk\\ship.png");
+    SDL_Surface* ws = SDL_GetWindowSurface(sdl_window);
+    SDL_Rect rect;
+    rect.x = 50;
+    rect.y = 50;
+    rect.w = 50;
+    rect.h = 50;
+    SDL_BlitSurface(img, NULL, ws, &rect);
+    
+    //SDL_RenderPresent(renderer);
+    SDL_UpdateWindowSurface(sdl_window);
     SDL_Delay(5000);
+    SDL_DestroySurface(img);
+    img = NULL;
+    SDL_DestroySurface(ws);
     SDL_DestroyWindow(sdl_window);
     SDL_DestroyProperties(props);
     //return Fl::run();
