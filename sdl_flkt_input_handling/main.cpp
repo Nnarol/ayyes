@@ -20,6 +20,8 @@ SDL_Renderer* renderer;
 SDL_Texture* img;
 int x = 50;
 int y = 50;
+int dst_x = -1;
+int dst_y = -1;
 class MyWindow : public Fl_Gl_Window {
 
 public:
@@ -45,6 +47,25 @@ void draw()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
     SDL_RenderClear(renderer);
+    if (dst_x != -1 && dst_y != -1)
+    {
+        if (dst_x > x)
+        {
+            x += 1;
+        }
+        else if (dst_x < x)
+        {
+            x -= 1;
+        }
+        if (dst_y > y)
+        {
+            y += 1;
+        }
+        else if (dst_y < y)
+        {
+            y -= 1;
+        }
+    }
     SDL_FRect rect;
     rect.x = x;
     rect.y = y;
@@ -73,9 +94,9 @@ void handle_mouse(SDL_MouseButtonEvent button)
 {
     switch (button.button)
     {
-    case SDL_BUTTON_LEFT:
-        x = button.x;
-        y = button.y;
+    case SDL_BUTTON_RIGHT:
+        dst_x = button.x;
+        dst_y = button.y;
         break;
     default:
         break;
@@ -111,6 +132,7 @@ int main(int argc, char** argv)
     
     while (true)
     {
+        draw();
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -127,9 +149,8 @@ int main(int argc, char** argv)
                 break;
             }
         }
-        SDL_Delay(1);
-        draw();
-        auto check_val = Fl::wait();
+        SDL_Delay(5);
+        auto check_val = Fl::check();
         SDL_Log("fl msg: %d", check_val);
     }
 
