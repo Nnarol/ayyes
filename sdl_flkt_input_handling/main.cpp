@@ -69,6 +69,19 @@ void handle_keyboard(SDL_Keycode keycode)
     }
 }
 
+void handle_mouse(SDL_MouseButtonEvent button)
+{
+    switch (button.button)
+    {
+    case SDL_BUTTON_LEFT:
+        x = button.x;
+        y = button.y;
+        break;
+    default:
+        break;
+    }
+}
+
 int main(int argc, char** argv)
 {
     Fl_Window* main_win = new Fl_Window(0, 0, 600, 800, "Valami1");
@@ -106,6 +119,9 @@ int main(int argc, char** argv)
             {
             case SDL_EVENT_KEY_DOWN:
                 handle_keyboard(event.key.key);
+                break;
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                handle_mouse(event.button);
                 break;
             default:
                 break;
