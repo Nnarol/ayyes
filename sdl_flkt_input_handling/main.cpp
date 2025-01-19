@@ -27,6 +27,7 @@ class MyWindow : public Fl_Gl_Window {
 public:
     MyWindow(int x, int y, int w, int h, const char* l = 0);
     void draw() FL_OVERRIDE;
+    int handle(int event) FL_OVERRIDE;
 };
 
 MyWindow::MyWindow(int x, int y, int w, int h, const char* l)
@@ -36,6 +37,25 @@ MyWindow::MyWindow(int x, int y, int w, int h, const char* l)
 
 void MyWindow::draw() {
 
+}
+
+int MyWindow::handle(int event)
+{
+    switch (event)
+    {
+    case FL_FOCUS:
+    case FL_UNFOCUS:
+        return 1;
+    case FL_PUSH:
+        return 1;
+    case FL_KEYBOARD:
+        SDL_Event kb_event;
+        kb_event.type = SDL_EVENT_KEY_DOWN;
+        SDL_PushEvent(&kb_event);
+        return 1;
+    default:
+        return Fl_Gl_Window::handle(event);
+    }
 }
 
 void button_callback(Fl_Widget* w, void* c_s)
@@ -85,6 +105,9 @@ void handle_keyboard(SDL_Keycode keycode)
     case SDLK_RIGHT:
         x += 1;
         break;
+    case SDLK_W:
+        y += 1;
+        break;
     default:
         break;
     }
@@ -105,7 +128,7 @@ void handle_mouse(SDL_MouseButtonEvent button)
 
 int main(int argc, char** argv)
 {
-    Fl_Window* main_win = new Fl_Window(0, 0, 600, 800, "Valami1");
+    Fl_Window* main_win = new Fl_Window(0, 100, 600, 700, "Valami1");
     Fl_Button* button = new Fl_Button(401, 401, 100, 30, "Test");
     button->callback(button_callback);
     MyWindow *window = new MyWindow(0, 0, 400, 400, "Test");
@@ -114,6 +137,8 @@ int main(int argc, char** argv)
     main_win->end();
     main_win->show(argc, argv);
 
+    //Fl::focus(window);
+
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
         SDL_Log("Unable to init %s", SDL_GetError());
@@ -121,6 +146,8 @@ int main(int argc, char** argv)
     HWND hwnd = fl_xid(window);
     SDL_PropertiesID props = SDL_CreateProperties();
 
+    SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_FOCUSABLE_BOOLEAN, true);
+    SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN, true);
     SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_OPENGL_BOOLEAN, true);
     SDL_SetPointerProperty(props, SDL_PROP_WINDOW_CREATE_WIN32_PIXEL_FORMAT_HWND_POINTER, hwnd);
     SDL_SetPointerProperty(props, SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER, hwnd);
@@ -149,9 +176,10 @@ int main(int argc, char** argv)
                 break;
             }
         }
+        SDL_EventType;
         SDL_Delay(5);
         auto check_val = Fl::check();
-        SDL_Log("fl msg: %d", check_val);
+        //SDL_Log("fl msg: %d", check_val);
     }
 
     SDL_DestroyWindow(sdl_window);
