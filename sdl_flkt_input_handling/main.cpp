@@ -100,13 +100,16 @@ void handle_keyboard(SDL_Keycode keycode)
     switch (keycode)
     {
     case SDLK_LEFT:
-        x -= 1;
+        dst_x -= 10;
         break;
     case SDLK_RIGHT:
-        x += 1;
+        dst_x += 10;
         break;
     case SDLK_W:
-        y += 1;
+        dst_y += 1;
+        break;
+    case SDLK_SPACE:
+        SDL_Log("Space");
         break;
     default:
         break;
@@ -137,7 +140,7 @@ int main(int argc, char** argv)
     main_win->end();
     main_win->show(argc, argv);
 
-    //Fl::focus(window);
+    Fl::focus(window);
 
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
