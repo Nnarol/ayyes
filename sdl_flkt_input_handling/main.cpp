@@ -23,7 +23,7 @@ int y = 50;
 int dst_x = -1;
 int dst_y = -1;
 class MyWindow : public Fl_Gl_Window {
-
+    void kb_events();
 public:
     MyWindow(int x, int y, int w, int h, const char* l = 0);
     void draw() FL_OVERRIDE;
@@ -39,6 +39,24 @@ void MyWindow::draw() {
 
 }
 
+void MyWindow::kb_events()
+{
+    SDL_Event kb_event;
+    kb_event.type = SDL_EVENT_KEY_DOWN;
+    int key = Fl::event_key();
+    // Change from FL key to SDL key enum value
+    switch (key)
+    {
+    case FL_Left:
+        kb_event.key.key = SDLK_LEFT;
+        break;
+    default:
+        kb_event.key.key = SDLK_UNKNOWN;
+        break;
+    }
+    SDL_PushEvent(&kb_event);
+}
+
 int MyWindow::handle(int event)
 {
     switch (event)
@@ -49,9 +67,7 @@ int MyWindow::handle(int event)
     case FL_PUSH:
         return 1;
     case FL_KEYBOARD:
-        SDL_Event kb_event;
-        kb_event.type = SDL_EVENT_KEY_DOWN;
-        SDL_PushEvent(&kb_event);
+        kb_events();
         return 1;
     default:
         return Fl_Gl_Window::handle(event);
@@ -97,16 +113,17 @@ void draw()
 
 void handle_keyboard(SDL_Keycode keycode)
 {
+    SDL_Log("keyboard %x", keycode);
     switch (keycode)
     {
     case SDLK_LEFT:
+        SDL_Log("Left");
         dst_x -= 10;
+        dst_y = y;
         break;
     case SDLK_RIGHT:
-        dst_x += 10;
         break;
     case SDLK_W:
-        dst_y += 1;
         break;
     case SDLK_SPACE:
         SDL_Log("Space");
